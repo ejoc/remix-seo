@@ -77,7 +77,10 @@ async function getSitemapXml(
           const parentPath = parent.path
             ? removeTrailingSlash(parent.path)
             : "";
-          path = `${parentPath}/${path}`;
+
+          if (!path.startsWith("/")) {
+            path = `${parentPath}/${path}`;
+          }
           parentId = parent.parentId;
           parent = parentId ? routes[parentId] : null;
         }
@@ -85,6 +88,7 @@ async function getSitemapXml(
         // we can't handle dynamic routes, so if the handle doesn't have a
         // getSitemapEntries function, we just
         if (path.includes(":")) return;
+        if (path.includes("*")) return;
         if (id === "root") return;
 
         const entry: SitemapEntry = { route: removeTrailingSlash(path) };
