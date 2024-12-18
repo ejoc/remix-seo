@@ -2,7 +2,7 @@
 
 import type { ServerBuild } from "@remix-run/server-runtime";
 import isEqual from "lodash/isEqual";
-import { SEOHandle, SitemapEntry } from "../types";
+import { GenerateSitemapArgs, SEOHandle, SitemapEntry } from "../types";
 
 type Options = {
   siteUrl: string;
@@ -19,7 +19,7 @@ function removeTrailingSlash(s: string) {
 }
 
 async function getSitemapXml(
-  request: Request,
+  args: GenerateSitemapArgs,
   routes: ServerBuild["routes"],
   options: Options
 ) {
@@ -48,7 +48,7 @@ async function getSitemapXml(
 
         const handle = mod.handle as SEOHandle | undefined;
         if (handle?.getSitemapEntries) {
-          return handle.getSitemapEntries(request);
+          return handle.getSitemapEntries(args);
         }
 
         // exclude resource routes from the sitemap
